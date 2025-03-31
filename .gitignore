@@ -1,0 +1,25 @@
+# STM32CubeIDE system files
+.metadata/
+.ipch/
+*.launch
+*.orig
+*.bak
+
+# Build output
+/Debug/
+/Release/
+build*/
+/*.elf
+*.bin
+*.hex
+*.map
+*.lst
+
+# IDE logs, temp files
+*.log
+*.tmp
+*.swp
+
+# OS junk
+.DS_Store
+Thumbs.db
