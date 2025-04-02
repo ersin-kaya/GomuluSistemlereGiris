@@ -117,6 +117,13 @@ int main(void)
     // Turn on LD4
     HAL_GPIO_WritePin(LD4_GPIO_Port, LD4_Pin, GPIO_PIN_SET);
 
+    // Toggle LD3
+    HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+
+    // Delay
+    HAL_Delay(125);
+
+
   }
   /* USER CODE END 3 */
 }
