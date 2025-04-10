@@ -60,7 +60,7 @@ static void MX_SPI1_Init(void);
 void MX_USB_HOST_Process(void);
 
 /* USER CODE BEGIN PFP */
-
+static void BlinkLED(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uint8_t count, uint32_t delay_ms);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -113,6 +113,19 @@ int main(void)
     MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
+
+    // Read button state
+    GPIO_PinState button_state = HAL_GPIO_ReadPin(BLUE_BUTTON_GPIO_Port, BLUE_BUTTON_Pin);
+
+    if(button_state == GPIO_PIN_SET) {
+    	// Turn off red led (LD5)
+    	HAL_GPIO_WritePin(LD5_GPIO_Port, LD5_Pin, GPIO_PIN_RESET);
+    	// Blink blue led (LD6)
+    	BlinkLED(LD6_GPIO_Port, LD6_Pin, 2, 90);
+    } else {
+    	// Turn on red led (LD5)
+    	HAL_GPIO_WritePin(LD5_GPIO_Port, LD5_Pin, GPIO_PIN_SET);
+    }
   }
   /* USER CODE END 3 */
 }
@@ -320,11 +333,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
   HAL_GPIO_Init(PDM_OUT_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : B1_Pin */
-  GPIO_InitStruct.Pin = B1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_EVT_RISING;
+  /*Configure GPIO pin : BLUE_BUTTON_Pin */
+  GPIO_InitStruct.Pin = BLUE_BUTTON_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(BLUE_BUTTON_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : BOOT1_Pin */
   GPIO_InitStruct.Pin = BOOT1_Pin;
@@ -367,7 +380,16 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+static void BlinkLED(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uint8_t count, uint32_t delay_ms)
+{
+	for(uint8_t i = 0; i < count; i++)
+	{
+    	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_SET);
+    	HAL_Delay(delay_ms);
+    	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_RESET);
+    	HAL_Delay(delay_ms);
+	}
+}
 /* USER CODE END 4 */
 
 /**
